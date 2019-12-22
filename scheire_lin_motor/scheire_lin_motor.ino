@@ -106,11 +106,11 @@ void rotate(int direction) {
   if (!moving ) {
     if (direction) {
       motor_claw_0.run(FORWARD);
-      motor_claw_1.run(FORWARD);
+      motor_claw_1.run(BACKWARD);
     }
     else   {
       motor_claw_0.run(BACKWARD);
-      motor_claw_1.run(BACKWARD);
+      motor_claw_1.run(FORWARD);
     }
     moving = true;
 

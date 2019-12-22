@@ -43,19 +43,26 @@ void loop() {
   b = digitalRead(in1);
   c = digitalRead(in2);
   d = digitalRead(in3);
- 
+
   if (a == LOW) {
     armExtend(true);
+    laser_on();
   }
   if (b == LOW) {
     armExtend(false);
+    laser_on();
+
   }
 
   if (c == LOW) {
     rotate(true);
+    laser_on();
+
   }
   if (d == LOW) {
     rotate(false);
+    laser_on();
+
   }
   //  previous = all;
   //
@@ -65,9 +72,8 @@ void loop() {
     Serial.println("changes");
     stopArm();
     stopRot();
+    laser_off();
   }
-
-  //  test();
 }
 
 void test() {
@@ -98,6 +104,13 @@ void armExtend(bool direction) {
   }
   motor_lin.setSpeed(255);
   delay(500);
+}
+
+void laser_on() {
+  digitalWrite(LED, HIGH);
+}
+void laser_off() {
+  digitalWrite(LED, LOW);
 }
 
 void rotate(int direction) {

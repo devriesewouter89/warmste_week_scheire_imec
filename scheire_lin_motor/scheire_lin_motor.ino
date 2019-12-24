@@ -14,17 +14,19 @@ AF_DCMotor motor_claw_1(4);
 
 int cornerDelay;
 
-#define in0 14
-#define in1 15
-#define in2 16
-#define in3 17 // pin3 is used for pwm
-#define LED 2
+#define in0 A0
+#define in1 A1
+#define in2 A2
+#define in3 A3 // pin3 is used for pwm
+#define LED A4
 
 bool moving;
+long laserTimeout = 5000;
+long lastLaserTimer;
+
+
 
 void setup() {
-
-
   pinMode(in0, INPUT_PULLUP);
   pinMode(in1, INPUT_PULLUP);
   pinMode(in2, INPUT_PULLUP);
@@ -34,10 +36,10 @@ void setup() {
   Serial.begin(115200);
   moving = false;
 }
+
 int all, previous = 1;
+
 void loop() {
-
-
   int a, b, c, d = HIGH;
   a = digitalRead(in0);
   b = digitalRead(in1);
@@ -51,7 +53,6 @@ void loop() {
   if (b == LOW) {
     armExtend(false);
     laser_on();
-
   }
 
   if (c == LOW) {
@@ -70,10 +71,16 @@ void loop() {
 
   if (all != previous) {
     Serial.println("changes");
+    lastLaserTimer = millis();
     stopArm();
     stopRot();
+    laser_on();
+  }
+
+  if (millis() - laserTimeout > lastLaserTimer) {
     laser_off();
   }
+
 }
 
 void test() {
@@ -90,6 +97,8 @@ void test() {
   delay(3000);
   stopRot();
 }
+
+
 void armExtend(bool direction) {
   Serial.print("moving direction=");
   Serial.println(direction);
@@ -128,8 +137,8 @@ void rotate(int direction) {
     moving = true;
 
   }
-  motor_claw_0.setSpeed(255);
-  motor_claw_1.setSpeed(255);
+  motor_claw_0.setSpeed(100);
+  motor_claw_1.setSpeed(100);
   delay(500);
 }
 void stopArm() {

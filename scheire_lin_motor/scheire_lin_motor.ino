@@ -90,6 +90,7 @@ void test() {
   delay(3000);
   stopRot();
 }
+
 void armExtend(bool direction) {
   Serial.print("moving direction=");
   Serial.println(direction);
